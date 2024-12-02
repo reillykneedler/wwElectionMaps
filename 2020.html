@@ -1,10 +1,11 @@
-
-<meta charset="utf-8">
-<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
-<link href="https://api.mapbox.com/mapbox-gl-js/v3.8.0/mapbox-gl.css" rel="stylesheet">
-<script src="https://api.mapbox.com/mapbox-gl-js/v3.8.0/mapbox-gl.js"></script>
-<style>
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+  <link href="https://api.mapbox.com/mapbox-gl-js/v3.8.0/mapbox-gl.css" rel="stylesheet">
+  <script src="https://api.mapbox.com/mapbox-gl-js/v3.8.0/mapbox-gl.js"></script>
+  <style>
     body {
       margin: 0;
       padding: 0;
@@ -55,123 +56,131 @@
     .lighterred { background-color: #fce0e0; }
     .lightred { background-color: #eaa9a9; }
     .red { background-color: #db7171; }
-</style>
+  </style>
+</head>
+<body>
 <div id="map">
-<div class="legend">
-<div class="legend-title">LEADER MARGIN</div>
-<div class="legend-scale">
-<div class="legend-item"><span class="legend-color blue"></span>50-75%</div>
-<div class="legend-item"><span class="legend-color lightblue"></span>25-50%</div>
-<div class="legend-item"><span class="legend-color lighterblue"></span>0-25%</div>
-<div class="legend-item"><span class="legend-color lighterred"></span>0-25%</div>
-<div class="legend-item"><span class="legend-color lightred"></span>25-50%</div>
-<div class="legend-item"><span class="legend-color red"></span>50-75%</div>
-</div>
-</div>
+  <div class="legend">
+    <div class="legend-title">LEADER MARGIN</div>
+    <div class="legend-scale">
+      <div class="legend-item"><span class="legend-color blue"></span>50-75%</div>
+      <div class="legend-item"><span class="legend-color lightblue"></span>25-50%</div>
+      <div class="legend-item"><span class="legend-color lighterblue"></span>0-25%</div>
+      <div class="legend-item"><span class="legend-color lighterred"></span>0-25%</div>
+      <div class="legend-item"><span class="legend-color lightred"></span>25-50%</div>
+      <div class="legend-item"><span class="legend-color red"></span>50-75%</div>
+    </div>
+  </div>
 </div>
 <script>
-    mapboxgl.accessToken = 'pk.eyJ1Ijoib3NjYXJqcm9kcmlndWV6IiwiYSI6ImNtM2ZpOWVzazBxNXYyb3BzdnhuaDAzZHIifQ.RjI6wL9MmVydjPyHWUAzRQ';
+  mapboxgl.accessToken = 'pk.eyJ1Ijoib3NjYXJqcm9kcmlndWV6IiwiYSI6ImNtM2ZpOWVzazBxNXYyb3BzdnhuaDAzZHIifQ.RjI6wL9MmVydjPyHWUAzRQ';
 
-    const map = new mapboxgl.Map({
-      container: 'map',
-      style: 'mapbox://styles/oscarjrodriguez/cm3hvzrg0008i01r773ekffd5',
-      center: [-120.31473, 47.42429],
-      zoom: 9,
-    });
+  const map = new mapboxgl.Map({
+    container: 'map',
+    style: 'mapbox://styles/oscarjrodriguez/cm3hvzrg0008i01r773ekffd5',
+    center: [-120.31473, 47.42429],
+    zoom: 9,
+  });
 
-    const popup = new mapboxgl.Popup({ closeButton: false });
+  // Add zoom and rotation controls to the map.
+  map.addControl(new mapboxgl.NavigationControl());
 
-    map.on('mousemove', 'ch-20-final-cus6t0', function (e) {
-      if (e.features.length > 0) {
-        const feature = e.features[0];
+  const popup = new mapboxgl.Popup({ closeButton: false });
 
-        const popupContent = `
-          <div class="popup-content">
-            <table class="popup-table">
-              <colgroup>
-                <col style="width: 50%;">
-                <col style="width: 30%;">
-                <col style="width: 20%;">
-              <\/colgroup>
-              <thead>
-                <tr>
-                  <th>Candidate<\/th>
-                  <th>Votes<\/th>
-                  <th>%<\/th>
-                <\/tr>
-              <\/thead>
-              <tbody>
-                <tr>
-                  <td><span class="candidate-dot blue"><\/span>Joseph Biden<\/td>
-                  <td>${feature.properties['Biden'] || 'No data'}<\/td>
-                  <td>${feature.properties['shr_biden'] || 'No data'}%<\/td>
-                <\/tr>
-                <tr>
-                  <td><span class="candidate-dot red"><\/span>Donald J. Trump<\/td>
-                  <td>${feature.properties['Trump'] || 'No data'}<\/td>
-                  <td>${feature.properties['shr_trump'] || 'No data'}%<\/td>
-                <\/tr>
-              <\/tbody>
-            <\/table>
-          <\/div>
-        `;
+  map.on('mousemove', 'ch-20-final-cus6t0', function (e) {
+    if (e.features.length > 0) {
+      const feature = e.features[0];
 
-        popup.setLngLat(e.lngLat)
-          .setHTML(popupContent)
-          .addTo(map);
-
-        map.getCanvas().style.cursor = 'pointer';
-      } else {
-        map.getCanvas().style.cursor = '';
-        popup.remove();
-      }
-    });
-
-    map.on('mouseleave', 'ch-20-final-cus6t0', function () {
-      map.getCanvas().style.cursor = '';
-      popup.remove();
-    });
-    map.on('mousemove', 'dc-20-data-merged-crorvc', function (e) {
-  if (e.features.length > 0) {
-    const feature = e.features[0];
-    popup.setLngLat(e.lngLat)
-      .setHTML(`
+      const popupContent = `
         <div class="popup-content">
           <table class="popup-table">
             <colgroup>
               <col style="width: 50%;">
               <col style="width: 30%;">
               <col style="width: 20%;">
-            <\/colgroup>
+            </colgroup>
             <thead>
               <tr>
-                <th>Candidate<\/th>
-                <th>Votes<\/th>
-                <th>%<\/th>
-              <\/tr>
-            <\/thead>
+                <th>Candidate</th>
+                <th>Votes</th>
+                <th>%</th>
+              </tr>
+            </thead>
             <tbody>
               <tr>
-                <td><span class="candidate-dot blue"><\/span>Joseph Biden<\/td>
-                <td>${feature.properties['Biden'] || 'No data'}<\/td>
-                <td>${feature.properties['shr_biden'] || 'No data'}%<\/td>
-              <\/tr>
+                <td><span class="candidate-dot blue"></span>Joseph Biden</td>
+                <td>${feature.properties['Biden'] || 'No data'}</td>
+                <td>${feature.properties['shr_biden'] || 'No data'}%</td>
+              </tr>
               <tr>
-                <td><span class="candidate-dot red"><\/span>Donald J. Trump<\/td>
-                <td>${feature.properties['Trump'] || 'No data'}<\/td>
-                <td>${feature.properties['shr_trump'] || 'No data'}%<\/td>
-              <\/tr>
-            <\/tbody>
-          <\/table>
-        <\/div>
-      `)
-      .addTo(map);
-    map.getCanvas().style.cursor = 'pointer';
-  }
-});
+                <td><span class="candidate-dot red"></span>Donald J. Trump</td>
+                <td>${feature.properties['Trump'] || 'No data'}</td>
+                <td>${feature.properties['shr_trump'] || 'No data'}%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      `;
 
-map.on('mouseleave', 'dc-20-data-merged-crorvc', function () {
-  map.getCanvas().style.cursor = '';
-  popup.remove();
-});
+      popup.setLngLat(e.lngLat)
+        .setHTML(popupContent)
+        .addTo(map);
+
+      map.getCanvas().style.cursor = 'pointer';
+    } else {
+      map.getCanvas().style.cursor = '';
+      popup.remove();
+    }
+  });
+
+  map.on('mouseleave', 'ch-20-final-cus6t0', function () {
+    map.getCanvas().style.cursor = '';
+    popup.remove();
+  });
+
+  map.on('mousemove', 'dc-20-data-merged-crorvc', function (e) {
+    if (e.features.length > 0) {
+      const feature = e.features[0];
+      popup.setLngLat(e.lngLat)
+        .setHTML(`
+          <div class="popup-content">
+            <table class="popup-table">
+              <colgroup>
+                <col style="width: 50%;">
+                <col style="width: 30%;">
+                <col style="width: 20%;">
+              </colgroup>
+              <thead>
+                <tr>
+                  <th>Candidate</th>
+                  <th>Votes</th>
+                  <th>%</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><span class="candidate-dot blue"></span>Joseph Biden</td>
+                  <td>${feature.properties['Biden'] || 'No data'}</td>
+                  <td>${feature.properties['shr_biden'] || 'No data'}%</td>
+                </tr>
+                <tr>
+                  <td><span class="candidate-dot red"></span>Donald J. Trump</td>
+                  <td>${feature.properties['Trump'] || 'No data'}</td>
+                  <td>${feature.properties['shr_trump'] || 'No data'}%</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        `)
+        .addTo(map);
+      map.getCanvas().style.cursor = 'pointer';
+    }
+  });
+
+  map.on('mouseleave', 'dc-20-data-merged-crorvc', function () {
+    map.getCanvas().style.cursor = '';
+    popup.remove();
+  });
 </script>
+</body>
+</html>
